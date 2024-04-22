@@ -1,6 +1,5 @@
 package uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice;
 
-import com.fasterxml.classmate.AnnotationOverrides;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

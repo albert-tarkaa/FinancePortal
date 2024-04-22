@@ -28,6 +28,8 @@ public class InvoiceModel {
     private Type type;
     private Status status;
     private String studentId;
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
+    @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
 }

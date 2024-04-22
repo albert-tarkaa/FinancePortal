@@ -1,12 +1,14 @@
 FROM eclipse-temurin:17-jdk-focal
-LABEL authors="Albert Tarkaa "
+LABEL authors="Albert Tarkaa"
 
 WORKDIR /app
 
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw dependency:resolve-plugins
 
 COPY src ./src
 
-CMD ["./mvnw", "spring-boot:run"]
+RUN ./mvnw package
+
+ENTRYPOINT ["java", "-jar", "target/libraryportal.jar"]

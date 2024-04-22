@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Links {
-        private Link cancel;
-        private Link pay;
+    private Link cancel;
+    private Link pay;
 }

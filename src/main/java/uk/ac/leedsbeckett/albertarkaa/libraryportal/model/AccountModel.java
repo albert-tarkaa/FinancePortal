@@ -25,8 +25,9 @@ public class AccountModel {
     private String studentId;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 
-
     private List<InvoiceModel> invoiceList = new ArrayList<>();
+    @Builder.Default
     private boolean hasOutstandingBalance=false;
+    @Builder.Default
     private LocalDateTime createdAt=LocalDateTime.now();
 }

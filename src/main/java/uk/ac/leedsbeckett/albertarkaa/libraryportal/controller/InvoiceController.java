@@ -20,9 +20,9 @@ public class InvoiceController {
     private final InvoiceService invoiceService;
 
     @PostMapping("/create")
-    public ResponseEntity<ControllerResponse<CreateInvoiceResponse>> createInvoice(
+    public ResponseEntity<ControllerResponse<uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse>> createInvoice(
             @RequestBody CreateInvoiceRequest createInvoiceRequest) {
-        ControllerResponse<CreateInvoiceResponse> response = invoiceService.createInvoice (createInvoiceRequest);
+        ControllerResponse<uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse> response = invoiceService.createInvoice (createInvoiceRequest);
 
         if (response.isSuccess()) return ResponseEntity.ok(response);
         else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -30,7 +30,7 @@ public class InvoiceController {
     }
 
     @PutMapping("/pay/{reference}")
-    public ResponseEntity<ControllerResponse<CreateInvoiceResponse>> payInvoice(
+    public ResponseEntity<ControllerResponse<uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse>> payInvoice(
             @PathVariable String reference) {
         ControllerResponse<CreateInvoiceResponse> response = invoiceService.payInvoice(reference);
 
@@ -39,7 +39,7 @@ public class InvoiceController {
     }
 
     @PutMapping("/cancel/{reference}")
-    public ResponseEntity<ControllerResponse<CreateInvoiceResponse>> cancelInvoice(
+    public ResponseEntity<ControllerResponse<uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse>> cancelInvoice(
             @PathVariable String reference) {
         ControllerResponse<CreateInvoiceResponse> response = invoiceService.cancelInvoice(reference);
 
@@ -48,7 +48,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/get/{reference}")
-    public ResponseEntity<ControllerResponse<CreateInvoiceResponse>> getInvoice(
+    public ResponseEntity<ControllerResponse<uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse>> getInvoice(
             @PathVariable String reference) {
         ControllerResponse<CreateInvoiceResponse> response = invoiceService.getInvoice(reference);
 
@@ -57,7 +57,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/get/student/{studentId}")
-    public ResponseEntity<ControllerResponse<List<CreateInvoiceResponse>>> getInvoicesByStudentId(
+    public ResponseEntity<ControllerResponse<List<uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse>>> getInvoicesByStudentId(
             @PathVariable String studentId) {
         ControllerResponse<List<CreateInvoiceResponse>> response = invoiceService.getInvoicesByStudentId(studentId);
 
@@ -66,7 +66,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<ControllerResponse<List<CreateInvoiceResponse>>> getAllInvoices() {
+    public ResponseEntity<ControllerResponse<List<uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse>>> getAllInvoices() {
         ControllerResponse<List<CreateInvoiceResponse>> response = invoiceService.getInvoices();
 
         if (response.isSuccess()) return ResponseEntity.ok(response);
