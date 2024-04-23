@@ -2,7 +2,7 @@
 
 This is a simple microservices-based application which exposes a RESTful API. It is written in Java using the Spring Boot framework. It is intended for use as part of the SESC module at Leeds Beckett University..
 
-![Library Portal](finance.png?raw=true "Library Portal")
+![Finance Portal](finance.png?raw=true "Finance Portal")
 
 Postman documentation available here `https://documenter.getpostman.com/view/32686033/2sA3BobXMA`.
 
