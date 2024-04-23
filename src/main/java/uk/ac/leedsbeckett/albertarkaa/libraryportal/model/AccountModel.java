@@ -27,7 +27,7 @@ public class AccountModel {
 
     private List<InvoiceModel> invoiceList = new ArrayList<>();
     @Builder.Default
-    private boolean hasOutstandingBalance=false;
+    private boolean hasOutstandingBalance = false;
     @Builder.Default
-    private LocalDateTime createdAt=LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

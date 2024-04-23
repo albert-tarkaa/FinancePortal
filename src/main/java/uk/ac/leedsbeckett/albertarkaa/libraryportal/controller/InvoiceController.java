@@ -22,7 +22,7 @@ public class InvoiceController {
     @PostMapping("/create")
     public ResponseEntity<ControllerResponse<uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse>> createInvoice(
             @RequestBody CreateInvoiceRequest createInvoiceRequest) {
-        ControllerResponse<uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse> response = invoiceService.createInvoice (createInvoiceRequest);
+        ControllerResponse<uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse> response = invoiceService.createInvoice(createInvoiceRequest);
 
         if (response.isSuccess()) return ResponseEntity.ok(response);
         else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.ac.leedsbeckett.albertarkaa.libraryportal.util.Type;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 public class CreateInvoiceRequest {
     private double amount;
     @Builder.Default
-    private LocalDateTime dueDate= LocalDateTime.now();
+    private LocalDateTime dueDate = LocalDateTime.now();
     private Type type;
     private String StudentId;
 }

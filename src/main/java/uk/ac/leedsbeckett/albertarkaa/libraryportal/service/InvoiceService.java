@@ -11,7 +11,9 @@ import uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.ControllerRespo
 import uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.CreateInvoiceResponse;
 import uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.Link;
 import uk.ac.leedsbeckett.albertarkaa.libraryportal.dto.response.invoice.Links;
+import uk.ac.leedsbeckett.albertarkaa.libraryportal.model.AccountModel;
 import uk.ac.leedsbeckett.albertarkaa.libraryportal.model.InvoiceModel;
+import uk.ac.leedsbeckett.albertarkaa.libraryportal.repository.AccountRepository;
 import uk.ac.leedsbeckett.albertarkaa.libraryportal.repository.InvoiceRepository;
 import uk.ac.leedsbeckett.albertarkaa.libraryportal.util.Status;
 
@@ -23,6 +25,7 @@ public class InvoiceService {
 
     private static final Logger logger = LoggerFactory.getLogger(InvoiceService.class);
     private final InvoiceRepository invoiceRepository;
+    private final AccountRepository accountRepository;
     @Value("${AppURL}")
     private String AppURL;
 
@@ -45,6 +48,11 @@ public class InvoiceService {
                     .build();
 
             invoiceRepository.save(invoice);
+
+            AccountModel account = accountRepository.findByStudentId(invoice.getStudentId());
+
+            account.setHasOutstandingBalance(true);
+            accountRepository.save(account);
 
             CreateInvoiceResponse createInvoiceResponse = CreateInvoiceResponse.builder()
                     .reference(invoice.getReference())
@@ -86,6 +94,14 @@ public class InvoiceService {
             invoice.setUpdatedAt(java.time.LocalDateTime.now());
             invoiceRepository.save(invoice);
 
+
+            AccountModel account = accountRepository.findByStudentId(invoice.getStudentId());
+
+            if (invoiceRepository.countByStudentIdAndStatus(invoice.getStudentId(), Status.OUTSTANDING) == 0){
+                account.setHasOutstandingBalance(false);
+                accountRepository.save(account);
+            }
+
             CreateInvoiceResponse createInvoiceResponse = CreateInvoiceResponse.builder()
                     .reference(invoice.getReference())
                     .amount(invoice.getAmount())
@@ -115,6 +131,15 @@ public class InvoiceService {
             invoice.setStatus(Status.PAID);
             invoice.setUpdatedAt(java.time.LocalDateTime.now());
             invoiceRepository.save(invoice);
+
+
+            AccountModel account = accountRepository.findByStudentId(invoice.getStudentId());
+
+
+            if (invoiceRepository.countByStudentIdAndStatus(invoice.getStudentId(), Status.OUTSTANDING) == 0){
+                account.setHasOutstandingBalance(false);
+                accountRepository.save(account);
+            }
 
             CreateInvoiceResponse createInvoiceResponse = CreateInvoiceResponse.builder()
                     .reference(invoice.getReference())
@@ -147,15 +172,15 @@ public class InvoiceService {
                     .status(String.valueOf(invoice.getStatus()))
                     .studentId(invoice.getStudentId())
                     .links(
-                           invoice.getStatus() == Status.OUTSTANDING ?
-                            Links.builder()
-                                    .cancel(Link.builder()
-                                            .href(AppURL + "/api/invoice/cancel/" + invoice.getReference())
-                                            .build())
-                                    .pay(Link.builder()
-                                            .href(AppURL + "/api/invoice/pay/" + invoice.getReference())
-                                            .build())
-                                    .build() : null
+                            invoice.getStatus() == Status.OUTSTANDING ?
+                                    Links.builder()
+                                            .cancel(Link.builder()
+                                                    .href(AppURL + "/api/invoice/cancel/" + invoice.getReference())
+                                                    .build())
+                                            .pay(Link.builder()
+                                                    .href(AppURL + "/api/invoice/pay/" + invoice.getReference())
+                                                    .build())
+                                            .build() : null
                     )
                     .build();
 
