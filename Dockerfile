@@ -1,26 +1,27 @@
-FROM eclipse-temurin:17-jdk-focal
-LABEL authors="Albert Tarkaa"
+# Use the official OpenJDK image as the base image
+FROM openjdk:17-jdk-slim
 
-# Install Maven
-RUN apt-get update && \
-    apt-get install -y maven && \
-    rm -rf /var/lib/apt/lists/*
+# Install netcat
+RUN apt-get update && apt-get install -y netcat
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy Maven configuration files
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+# Copy the environment.properties file to the container
+COPY src/main/resources/environment.properties /app/environment.properties
 
-# Resolve Maven dependencies
-RUN mvn dependency:resolve-plugins
+# Copy the wait-for-it.sh script to the container
+COPY src/main/resources/wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
 
-# Copy source code
-COPY src ./src
+# Copy the compiled JAR file to the container
+COPY target/*.jar app.jar
 
-# Package the application
-RUN mvn package
+# Expose the port specified in the environment.properties file
+EXPOSE 8085
 
-# Set entry point
-ENTRYPOINT ["java", "-jar", "target/libraryPortal.jar"]
+# Set the environment variable for the active profile
+ENV SPRING_PROFILES_ACTIVE=debug
+
+# Run the Spring Boot application with the environment.properties file
+CMD ["/app/wait-for-it.sh", "db", "3306", "--", "java", "-jar", "app.jar", "--spring.config.location=file:///app/environment.properties"]

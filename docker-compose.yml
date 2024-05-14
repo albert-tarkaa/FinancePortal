@@ -1,47 +1,44 @@
-version: "3.1"
+version: '3.1'
+
+networks:
+  default:
+    external: true
+    name: ouroboros
 
 services:
   db:
-    container_name: mysql-libraryportal-db
+    container_name: mysql-financeportal-db
     image: mysql:8.3.0
     ports:
-      - "3310:3306"
-    expose:
-      - "3306"
-    deploy:
-      mode: global
-    restart: always
+      - "3303:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_USER: ${DATABASE_USER}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: qwerty@123
+      MYSQL_DATABASE: financePortal
     volumes:
-      - mysql_libraryportal_data:/var/lib/mysql
+      - mysql_financeportal_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
 
   api:
-    container_name: libraryportal-api
+    container_name: financeportal-api
     build:
+      context: .
       dockerfile: Dockerfile
     ports:
-      - "8089:8089"
+      - "8085:8085"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      SERVER_PORT: ${SERVER_PORT}
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
-      SPRING_DATASOURCE_USERNAME: ${DATABASE_USER}
-      SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD}
-      SPRING_DATASOURCE_DRIVERCLASSNAME: ${DATABASE_DRIVER_CLASS_NAME}
-      SPRING_JPA_HIBERNATE_DDL-AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
-      JWT_SECRET: ${JWT_SECRET}
+      SERVER_PORT: 8085
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/financePortal
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: qwerty@123
     volumes:
-      - libraryportal_api:/app
-    networks:
-      - default
+      - financeportal_api:/app
 
 volumes:
-  mysql_libraryportal_data:
+  mysql_financeportal_data:
     driver: local
-  libraryportal_api:
+  financeportal_api:
     driver: local
